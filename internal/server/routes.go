@@ -2,20 +2,20 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/julienschmidt/httprouter"
+	"time"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {
-	r := httprouter.New()
+	mux := http.NewServeMux()
 
 	// Wrap all routes with CORS middleware
-	corsWrapper := s.corsMiddleware(r)
+	corsWrapper := s.corsMiddleware(mux)
 
-	r.HandlerFunc(http.MethodGet, "/", s.HelloWorldHandler)
-
+	mux.HandleFunc("GET /", s.HelloWorldHandler)
+	mux.HandleFunc("GET /demo", s.Http1ServerDemo)
 	return corsWrapper
 }
 
@@ -48,4 +48,9 @@ func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, _ = w.Write(jsonResp)
+}
+
+func (s *Server) Http1ServerDemo(w http.ResponseWriter, r *http.Request) {
+	time.Sleep(10 * time.Millisecond)
+	fmt.Fprintf(w, "ok")
 }
