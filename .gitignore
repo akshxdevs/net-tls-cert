@@ -32,3 +32,16 @@ main
 # OS X generated file
 .DS_Store
 
+#certs
+ca.srl
+ca.crt
+ca.key
+
+server.crt
+server.csr
+server.key
+
+client.crt
+client.csr
+client.key
+
